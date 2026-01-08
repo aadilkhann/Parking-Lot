@@ -38,4 +38,7 @@ public class ParkingSpot {
         };
     }
 
+    public int getSpotId() {
+        return spotId;
+    }
 }

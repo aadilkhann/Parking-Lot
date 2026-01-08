@@ -11,22 +11,25 @@ public class ParkingLot {
         this.parkingFloors = parkingFloors;
     }
 
-    public void parkVehicle(Vehicle vehicle){
-        for(ParkingFloor floor:parkingFloors){
-            for(ParkingSpot spot:floor.getParkingSpots()){
-                if(spot.canFit(vehicle)){
+    public Ticket parkVehicle(Vehicle vehicle) {
+        for (ParkingFloor floor : parkingFloors) {
+            for (ParkingSpot spot : floor.getParkingSpots()) {
+                if (spot.canFit(vehicle)) {
                     spot.assignVehicle(vehicle);
                     System.out.println("Vehicle parked successfully");
-                    //can add ticket generation logic here and return Ticket.
-                    return;
-                }
-                else{
-                    System.out.println("Spot not available");
+                    return new Ticket(floor.getFloorNo() + spot.getSpotId(), vehicle.getVehicleType(), 30,
+                            floor.getFloorNo(), spot.getSpotId());
                 }
             }
         }
+        System.out.println("Spot not available");
+        return null;
     }
-    public void unparkVehicle(){
 
+    public void unparkVehicle(Ticket ticket) {
+        //can add payment logic
+        parkingFloors.get(ticket.getFloor())
+                .getParkingSpots()
+                .remove(ticket.getSpot_id());
     }
 }
