@@ -1,22 +1,26 @@
 package org.parkinglot;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Timer;
+import java.util.UUID;
 
 public class Ticket {
-    private int ticketId;
+    private UUID ticketId;
     private Vehicle vehicle;
     private ParkingSpot spot;
     private LocalTime entryTime;
+    private LocalDate entryDate;
 
-    public Ticket(int ticketId, Vehicle vehicle, ParkingSpot spot, LocalTime entryTime) {
-        this.ticketId = ticketId;
+    public Ticket(Vehicle vehicle, ParkingSpot spot) {
+        this.ticketId = UUID.randomUUID();
         this.vehicle = vehicle;
         this.spot = spot;
-        this.entryTime = entryTime;
+        this.entryTime = LocalTime.now();
+        this.entryDate=LocalDate.now();
     }
 
-    public int getTicketId() {
+    public UUID getTicketId() {
         return ticketId;
     }
 

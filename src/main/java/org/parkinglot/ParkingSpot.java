@@ -5,12 +5,12 @@ import java.util.UUID;
 public class ParkingSpot {
     private UUID spotId;
     private VehicleType spotType;
-    private Vehicle parkedVehicle;
+    private boolean isOccupied;
 
     public ParkingSpot(VehicleType spotType) {
         this.spotId = UUID.randomUUID();
         this.spotType = spotType;
-        this.parkedVehicle = null;
+        this.isOccupied = false;
     }
 
     public UUID getSpotId() {
@@ -21,21 +21,11 @@ public class ParkingSpot {
         return spotType;
     }
 
-    public Vehicle getParkedVehicle() {
-        return parkedVehicle;
+    public boolean isOccupied() {
+        return isOccupied;
     }
 
-    public void parkVehicle(Vehicle parkedVehicle) {
-        if (parkedVehicle==null){
-            this.parkedVehicle = parkedVehicle;
-        }
-        else{
-            throw new RuntimeException("Vehicle already parked in the spot");
-        }
-    }
-
-    public boolean unParkVehicle() {
-        this.parkedVehicle = null;
-        return true;
+    public void changeOccupancy(boolean occupied) {
+        isOccupied = occupied;
     }
 }

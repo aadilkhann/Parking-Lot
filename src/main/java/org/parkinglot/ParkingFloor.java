@@ -1,16 +1,15 @@
 package org.parkinglot;
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public class ParkingFloor {
     private int floor;
+    private List<ParkingSpot> allParkingSpot;
     private Map<VehicleType, Queue<ParkingSpot>> freeParkingSpots;
 
     public ParkingFloor(int floor) {
         this.floor = floor;
+        this.allParkingSpot = new ArrayList<>();
         this.freeParkingSpots = new HashMap<>();
     }
 
@@ -18,28 +17,50 @@ public class ParkingFloor {
         return floor;
     }
 
-    public Map<VehicleType, Queue<ParkingSpot>> getFreeParkingSpots() {
-        return freeParkingSpots;
+    public void addParkingSpot(List<ParkingSpot> allParkingSpot) {
+        this.allParkingSpot.addAll(allParkingSpot);
+        syncParkingSpot(allParkingSpot);
     }
 
-    public boolean addNewFreeParkingSpots(VehicleType vehicleType, int spotQuantity) {
-        try {
-            Queue<ParkingSpot> currentspots=freeParkingSpots.get(vehicleType);
-            if (currentspots==null){
-                Queue<ParkingSpot> newSpots=new ArrayDeque<>();
-                for(int i=0;i<spotQuantity;i++){
-                    newSpots.offer(new ParkingSpot(vehicleType));
-                }
-                freeParkingSpots.put(vehicleType,newSpots);
-                return true;
-            }
-            else{
-                //Handle to add new spot when already spots are available.
-            }
-            return false;
+    public void syncParkingSpot(List<ParkingSpot> allParkingSpot) {
+        freeParkingSpots.clear();
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if (allParkingSpot == null) {
+            return;
         }
+
+        for (ParkingSpot parkingSpot : allParkingSpot) {
+            if (parkingSpot == null) {
+                continue;
+            }
+
+            freeParkingSpots
+                    .computeIfAbsent(parkingSpot.getSpotType(), k -> new LinkedList<>())
+                    .offer(parkingSpot);
+        }
+    }
+
+    public ParkingSpot allocateSpot(VehicleType vehicleType){
+        Queue<ParkingSpot> spots =
+                freeParkingSpots.get(vehicleType);
+
+        if (spots == null || spots.isEmpty()) {
+            throw new RuntimeException(
+                    "No available spots for vehicle type: "
+                            + vehicleType);
+        }
+
+        ParkingSpot spot = spots.poll();
+
+        if (spot==null) throw new RuntimeException("Parking Full");
+        else if (spot.isOccupied()) throw new RuntimeException("Inconsistent state :: Spot is already occupied");
+
+        spot.changeOccupancy(true);
+        return spot;
+    }
+
+    public void freeSpot(ParkingSpot parkingSpot){
+        parkingSpot.changeOccupancy(false);
+        freeParkingSpots.get(parkingSpot.getSpotType()).offer(parkingSpot);
     }
 }
