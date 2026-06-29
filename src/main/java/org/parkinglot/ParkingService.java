@@ -14,10 +14,12 @@ public class ParkingService {
 
     public Ticket parkVehicle(Vehicle vehicle){
         ParkingSpot spot=getNearestSpot(vehicle.getVehicleType());
-        if (spot==null) throw new RuntimeException("Couldn't find spot or parking is full");
+        if (spot==null){
+            System.out.println("Couldn't find spot or parking is full");
+            return null;
+        }
 
         Ticket ticket= new Ticket(vehicle,spot);
-
         activeTickets.put(vehicle.getVehicleNumber(),ticket);
         return ticket;
     }
@@ -27,8 +29,24 @@ public class ParkingService {
             ParkingSpot allocatedSpot=floor.allocateSpot(vehicleType);
             if (allocatedSpot!=null) return allocatedSpot;
         }
-        throw new RuntimeException("Couldn't find spot or parking is full");
+        return null;
     }
 
-//    unparkVehicle(String vehicleNumber)
+    public void unparkVehicle(String vehicleNumber){
+        Ticket ticket=activeTickets.get(vehicleNumber);
+        ParkingSpot spot=ticket.getSpot();
+        findAndFreeSpot(spot);
+    }
+    public void findAndFreeSpot(ParkingSpot parkingSpot){
+        for(ParkingFloor floor : parkingLot.getParkingFloors()){
+            List<ParkingSpot> parkingSpotsList=floor.getAllParkingSpot();
+            for (ParkingSpot spot: parkingSpotsList){
+                if(spot.equals(parkingSpot)){
+                    floor.freeSpot(parkingSpot);
+                    return;
+                }
+            }
+        }
+        System.out.println("No Spot or Vehicle Found:: Invalid Ticket");
+    }
 }

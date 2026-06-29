@@ -1,5 +1,6 @@
 package org.parkinglot;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class ParkingSpot {
@@ -27,5 +28,17 @@ public class ParkingSpot {
 
     public void changeOccupancy(boolean occupied) {
         isOccupied = occupied;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ParkingSpot that = (ParkingSpot) o;
+        return isOccupied == that.isOccupied && Objects.equals(spotId, that.spotId) && spotType == that.spotType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(spotId, spotType, isOccupied);
     }
 }

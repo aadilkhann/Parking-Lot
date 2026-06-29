@@ -45,16 +45,11 @@ public class ParkingFloor {
                 freeParkingSpots.get(vehicleType);
 
         if (spots == null || spots.isEmpty()) {
-            throw new RuntimeException(
-                    "No available spots for vehicle type: "
-                            + vehicleType);
+            return null;
         }
 
         ParkingSpot spot = spots.poll();
-
-        if (spot==null) throw new RuntimeException("Parking Full");
-        else if (spot.isOccupied()) throw new RuntimeException("Inconsistent state :: Spot is already occupied");
-
+        if (spot==null || spot.isOccupied()) return null;
         spot.changeOccupancy(true);
         return spot;
     }
@@ -62,5 +57,9 @@ public class ParkingFloor {
     public void freeSpot(ParkingSpot parkingSpot){
         parkingSpot.changeOccupancy(false);
         freeParkingSpots.get(parkingSpot.getSpotType()).offer(parkingSpot);
+    }
+
+    public List<ParkingSpot> getAllParkingSpot() {
+        return allParkingSpot;
     }
 }
