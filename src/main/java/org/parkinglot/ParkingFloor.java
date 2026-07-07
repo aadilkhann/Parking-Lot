@@ -18,6 +18,9 @@ public class ParkingFloor {
     }
 
     public void addParkingSpot(List<ParkingSpot> allParkingSpot) {
+        for (ParkingSpot parkingSpot : allParkingSpot) {
+            parkingSpot.setParkingFloor(this);
+        }
         this.allParkingSpot.addAll(allParkingSpot);
         syncParkingSpot(allParkingSpot);
     }

@@ -35,18 +35,7 @@ public class ParkingService {
     public void unparkVehicle(String vehicleNumber){
         Ticket ticket=activeTickets.get(vehicleNumber);
         ParkingSpot spot=ticket.getSpot();
-        findAndFreeSpot(spot);
-    }
-    public void findAndFreeSpot(ParkingSpot parkingSpot){
-        for(ParkingFloor floor : parkingLot.getParkingFloors()){
-            List<ParkingSpot> parkingSpotsList=floor.getAllParkingSpot();
-            for (ParkingSpot spot: parkingSpotsList){
-                if(spot.equals(parkingSpot)){
-                    floor.freeSpot(parkingSpot);
-                    return;
-                }
-            }
-        }
-        System.out.println("No Spot or Vehicle Found:: Invalid Ticket");
+        ParkingFloor parkingFloor=spot.getParkingFloor();
+        parkingFloor.freeSpot(spot);
     }
 }
