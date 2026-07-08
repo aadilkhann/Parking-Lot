@@ -1,8 +1,11 @@
 package org.parkinglot;
 
+import org.parkinglot.model.ParkingLot;
+import org.parkinglot.model.ParkingSpot;
+import org.parkinglot.model.VehicleType;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.

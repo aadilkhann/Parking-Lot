@@ -1,4 +1,4 @@
-package org.parkinglot;
+package org.parkinglot.model;
 
 public class Vehicle {
     private String vehicleNumber;

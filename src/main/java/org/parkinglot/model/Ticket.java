@@ -1,8 +1,7 @@
-package org.parkinglot;
+package org.parkinglot.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Timer;
 import java.util.UUID;
 
 public class Ticket {

@@ -1,4 +1,7 @@
-package org.parkinglot;
+package org.parkinglot.service;
+
+import org.parkinglot.model.VehicleType;
+import org.parkinglot.model.*;
 
 import java.util.*;
 
