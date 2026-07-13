@@ -17,6 +17,10 @@ public class ParkingFloor {
         return floor;
     }
 
+    public Map<VehicleType, Queue<ParkingSpot>> getFreeParkingSpots() {
+        return freeParkingSpots;
+    }
+
     public void addParkingSpot(List<ParkingSpot> allParkingSpot) {
         for (ParkingSpot parkingSpot : allParkingSpot) {
             parkingSpot.setParkingFloor(this);
