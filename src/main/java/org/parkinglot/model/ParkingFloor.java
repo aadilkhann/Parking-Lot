@@ -13,6 +13,10 @@ public class ParkingFloor {
         this.freeParkingSpots = new HashMap<>();
     }
 
+    public Map<VehicleType, Queue<ParkingSpot>> getFreeParkingSpots() {
+        return freeParkingSpots;
+    }
+
     public int getFloor() {
         return floor;
     }

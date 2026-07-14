@@ -29,8 +29,7 @@ public class ParkingService {
 
     public ParkingSpot getNearestSpot(VehicleType vehicleType){
         for(ParkingFloor floor : parkingLot.getParkingFloors()){
-            ParkingSpot allocatedSpot=floor.allocateSpot(vehicleType);
-            if (allocatedSpot!=null) return allocatedSpot;
+            floor.
         }
         return null;
     }
