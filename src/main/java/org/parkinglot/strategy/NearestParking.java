@@ -1,17 +1,19 @@
 package org.parkinglot.strategy;
 
-import org.parkinglot.model.ParkingFloor;
-import org.parkinglot.model.ParkingLot;
-import org.parkinglot.model.ParkingSpot;
-import org.parkinglot.model.Vehicle;
+import org.parkinglot.model.*;
+
+import java.util.Collection;
 
 public class NearestParking implements ParkingStrategy{
 
     @Override
-    public ParkingSpot findSpot(ParkingLot lot, Vehicle vehicle) {
+    public ParkingSpot findSpot(ParkingLot lot, VehicleType vehicleType) {
         for(ParkingFloor floor : lot.getParkingFloors()){
-            ParkingSpot allocatedSpot=floor.allocateSpot(vehicle.getVehicleType());
-            if (allocatedSpot!=null) return allocatedSpot;
+            Collection<ParkingSpot> availableSpots=floor.getFreeParkingSpots(vehicleType);
+            if(availableSpots==null) continue;
+            for (ParkingSpot spot: availableSpots){
+                return spot;
+            }
         }
         return null;
     }

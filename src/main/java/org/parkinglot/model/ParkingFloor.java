@@ -13,16 +13,12 @@ public class ParkingFloor {
         this.freeParkingSpots = new HashMap<>();
     }
 
-    public Map<VehicleType, Queue<ParkingSpot>> getFreeParkingSpots() {
-        return freeParkingSpots;
-    }
-
     public int getFloor() {
         return floor;
     }
 
-    public Map<VehicleType, Queue<ParkingSpot>> getFreeParkingSpots() {
-        return freeParkingSpots;
+    public Collection<ParkingSpot> getFreeParkingSpots(VehicleType vehicleType) {
+        return freeParkingSpots.get(vehicleType);
     }
 
     public void addParkingSpot(List<ParkingSpot> allParkingSpot) {
@@ -63,6 +59,20 @@ public class ParkingFloor {
         if (spot==null || spot.isOccupied()) return null;
         spot.changeOccupancy(true);
         return spot;
+    }
+
+    public ParkingSpot allocateSpot(ParkingSpot parkingSpot){
+        Queue<ParkingSpot> spots =
+                freeParkingSpots.get(parkingSpot.getSpotType());
+
+        if (spots == null || spots.isEmpty()) {
+            return null;
+        }
+        boolean removed=spots.remove(parkingSpot);
+
+        if (!removed) return null;
+        parkingSpot.changeOccupancy(true);
+        return parkingSpot;
     }
 
     public void freeSpot(ParkingSpot parkingSpot){
