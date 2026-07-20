@@ -9,8 +9,7 @@ public class NearestParking implements ParkingStrategy{
     @Override
     public ParkingSpot findSpot(ParkingLot lot, VehicleType vehicleType) {
         for(ParkingFloor floor : lot.getParkingFloors()){
-            Collection<ParkingSpot> availableSpots=floor.getFreeParkingSpots(vehicleType);
-            if(availableSpots==null) continue;
+            Iterable<ParkingSpot> availableSpots=floor.getFreeParkingSpots(vehicleType);
             for (ParkingSpot spot: availableSpots){
                 return spot;
             }
