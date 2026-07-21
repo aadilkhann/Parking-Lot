@@ -10,6 +10,9 @@ public class Ticket {
     private ParkingSpot spot;
     private LocalTime entryTime;
     private LocalDate entryDate;
+    private LocalTime exitTime;
+    private LocalDate exitDate;
+    private Payment paymentRecipt;
 
     public Ticket(Vehicle vehicle, ParkingSpot spot) {
         this.ticketId = UUID.randomUUID();
@@ -17,6 +20,7 @@ public class Ticket {
         this.spot = spot;
         this.entryTime = LocalTime.now();
         this.entryDate=LocalDate.now();
+        this.paymentRecipt=null;
     }
 
     public UUID getTicketId() {
@@ -33,5 +37,25 @@ public class Ticket {
 
     public LocalTime getEntryTime() {
         return entryTime;
+    }
+
+    public void setPaymentRecipt(Payment paymentRecipt) {
+        this.paymentRecipt = paymentRecipt;
+    }
+
+    public LocalTime getExitTime() {
+        return exitTime;
+    }
+
+    public void setExitTime(LocalTime exitTime) {
+        this.exitTime = exitTime;
+    }
+
+    public LocalDate getExitDate() {
+        return exitDate;
+    }
+
+    public void setExitDate(LocalDate exitDate) {
+        this.exitDate = exitDate;
     }
 }

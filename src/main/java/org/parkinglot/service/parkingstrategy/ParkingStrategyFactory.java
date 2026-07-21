@@ -1,6 +1,6 @@
-package org.parkinglot.strategy;
+package org.parkinglot.service.parkingstrategy;
 
-import org.parkinglot.model.ParkingType;
+import org.parkinglot.model.enums.ParkingType;
 
 import java.util.HashMap;
 import java.util.Map;

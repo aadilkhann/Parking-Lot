@@ -1,8 +1,7 @@
-package org.parkinglot.strategy;
+package org.parkinglot.service.parkingstrategy;
 
 import org.parkinglot.model.*;
-
-import java.util.Collection;
+import org.parkinglot.model.enums.VehicleType;
 
 public class NearestParking implements ParkingStrategy{
 

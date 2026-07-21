@@ -2,7 +2,7 @@ package org.parkinglot;
 
 import org.parkinglot.model.ParkingLot;
 import org.parkinglot.model.ParkingSpot;
-import org.parkinglot.model.VehicleType;
+import org.parkinglot.model.enums.VehicleType;
 
 import java.util.ArrayList;
 import java.util.List;

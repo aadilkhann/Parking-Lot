@@ -1,5 +1,7 @@
 package org.parkinglot.model;
 
+import org.parkinglot.model.enums.VehicleType;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -31,7 +33,7 @@ public class ParkingSpot {
         isOccupied = occupied;
     }
 
-    public void setParkingFloor(ParkingFloor parkingFloor) {
+    void setParkingFloor(ParkingFloor parkingFloor) {
         this.parkingFloor = parkingFloor;
     }
 
@@ -48,6 +50,6 @@ public class ParkingSpot {
 
     @Override
     public int hashCode() {
-        return Objects.hash(spotId, spotType, isOccupied);
+        return Objects.hash(spotId, spotType);
     }
 }

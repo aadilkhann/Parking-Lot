@@ -1,5 +1,7 @@
 package org.parkinglot.model;
 
+import org.parkinglot.model.enums.VehicleType;
+
 import java.util.*;
 
 public class ParkingFloor {
@@ -17,8 +19,11 @@ public class ParkingFloor {
         return floor;
     }
 
-    public Collection<ParkingSpot> getFreeParkingSpots(VehicleType vehicleType) {
-        return freeParkingSpots.get(vehicleType);
+    public Iterable<ParkingSpot> getFreeParkingSpots(VehicleType vehicleType) {
+        Queue<ParkingSpot> parkingSpots = freeParkingSpots.get(vehicleType);
+
+        if (parkingSpots==null) return Collections.emptyList();
+        return Collections.unmodifiableCollection(parkingSpots);
     }
 
     public void addParkingSpot(List<ParkingSpot> allParkingSpot) {

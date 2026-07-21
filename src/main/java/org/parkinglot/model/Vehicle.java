@@ -1,5 +1,7 @@
 package org.parkinglot.model;
 
+import org.parkinglot.model.enums.VehicleType;
+
 public class Vehicle {
     private String vehicleNumber;
     private VehicleType vehicleType;

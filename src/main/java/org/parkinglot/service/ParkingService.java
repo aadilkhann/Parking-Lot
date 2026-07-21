@@ -1,39 +1,42 @@
 package org.parkinglot.service;
 
-import org.parkinglot.model.VehicleType;
+import org.parkinglot.model.enums.ParkingType;
 import org.parkinglot.model.*;
-import org.parkinglot.strategy.NearestParking;
-import org.parkinglot.strategy.ParkingStrategy;
+import org.parkinglot.model.enums.PaymentMethod;
+import org.parkinglot.model.enums.PaymentStatus;
+import org.parkinglot.service.parkingstrategy.ParkingStrategyFactory;
 
 import java.util.*;
 
 public class ParkingService {
 
-    Map<String, Ticket> activeTickets;
-    ParkingLot parkingLot;
-    ParkingStrategy nearestparkingStrategy;
+    final private Map<String, Ticket> activeTickets;
+    final private Map<String, Ticket> archivedTickets;
+    final private ParkingLot parkingLot;
+    final private ParkingStrategyFactory parkingStrategyFactory;
+    final private PaymentService paymentService;
+    final private FareCalculator fareCalculator;
 
     public ParkingService(ParkingLot parkingLot) {
         this.parkingLot = parkingLot;
         this.activeTickets = new HashMap<>();
-        this.nearestparkingStrategy=new NearestParking();
+        this.archivedTickets = new HashMap<>();
+        this.parkingStrategyFactory=new ParkingStrategyFactory();
+        this.paymentService = new PaymentService();
+        this.fareCalculator = new FareCalculator();
     }
 
-    public Ticket parkVehicle(Vehicle vehicle, String parkingType){
-        ParkingSpot spot;
-        switch (parkingType) {
-            case "NEARESTPARKING":
-                spot=getNearestSpot(vehicle.getVehicleType());
-                break;
-
-            default:
-                return null;
+    public Ticket parkVehicle(Vehicle vehicle, ParkingType parkingType){
+        if(parkingType==null){
+            return null;
         }
-//        ParkingSpot spot=getNearestSpot(vehicle.getVehicleType());
+        ParkingSpot spot=parkingStrategyFactory.getParkingStrategy(parkingType).findSpot(parkingLot,vehicle.getVehicleType());
+
         if (spot==null){
             System.out.println("Couldn't find spot or parking is full");
             return null;
         }
+
         ParkingFloor parkingFloor=spot.getParkingFloor();
         parkingFloor.allocateSpot(spot);
         Ticket ticket= new Ticket(vehicle,spot);
@@ -41,14 +44,40 @@ public class ParkingService {
         return ticket;
     }
 
-    public ParkingSpot getNearestSpot(VehicleType vehicleType){
-        return nearestparkingStrategy.findSpot(parkingLot,vehicleType);
-    }
-
-    public void unparkVehicle(String vehicleNumber){
+    public void exitVehicle(String vehicleNumber){
         Ticket ticket=activeTickets.get(vehicleNumber);
+        if (ticket==null){
+            System.out.println("Vehicle "+vehicleNumber+" not found");
+            return;
+        }
         ParkingSpot spot=ticket.getSpot();
         ParkingFloor parkingFloor=spot.getParkingFloor();
+
+        //Calculate fare
+        double totalFare = fareCalculator.calculateFare(ticket);
+
+        //Make Payment
+        Payment paymentReceipt = paymentService.processPayment(totalFare, PaymentMethod.UPI);
+        if (paymentReceipt.getPaymentStatus()!= PaymentStatus.SUCCESS){
+            System.out.println("Payment failed or pending retry again");
+            return;
+        }
+        ticket.setPaymentRecipt(paymentReceipt);
+        //Finally release spot
         parkingFloor.freeSpot(spot);
+
+        archivedTickets.put(vehicleNumber,ticket);
+        activeTickets.remove(vehicleNumber);
     }
+
+//    public void unparkVehicle(String vehicleNumber){
+//        Ticket ticket=activeTickets.get(vehicleNumber);
+//        if (ticket==null){
+//            System.out.println("Vehicle "+vehicleNumber+" not found");
+//            return;
+//        }
+//        ParkingSpot spot=ticket.getSpot();
+//        ParkingFloor parkingFloor=spot.getParkingFloor();
+//        parkingFloor.freeSpot(spot);
+//    }
 }
