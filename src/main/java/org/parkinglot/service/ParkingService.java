@@ -30,15 +30,21 @@ public class ParkingService {
         if(parkingType==null){
             return null;
         }
-        ParkingSpot spot=parkingStrategyFactory.getParkingStrategy(parkingType).findSpot(parkingLot,vehicle.getVehicleType());
+        ParkingSpot spot;
 
-        if (spot==null){
-            System.out.println("Couldn't find spot or parking is full");
-            return null;
+        while (true) {
+            spot=parkingStrategyFactory.getParkingStrategy(parkingType).findSpot(parkingLot,vehicle.getVehicleType());
+
+            if (spot==null){
+                System.out.println("Couldn't find spot or parking is full");
+                return null;
+            }
+            ParkingFloor parkingFloor=spot.getParkingFloor();
+            if (parkingFloor.tryAllocate(spot)) {
+                break;
+            }
         }
-
-        ParkingFloor parkingFloor=spot.getParkingFloor();
-        parkingFloor.allocateSpot(spot);
+//        parkingFloor.L(spot);
         Ticket ticket= new Ticket(vehicle,spot);
         activeTickets.put(vehicle.getVehicleNumber(),ticket);
         return ticket;

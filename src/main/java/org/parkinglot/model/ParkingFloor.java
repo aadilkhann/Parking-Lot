@@ -88,4 +88,19 @@ public class ParkingFloor {
     public List<ParkingSpot> getAllParkingSpot() {
         return allParkingSpot;
     }
+
+    public synchronized boolean tryAllocate(ParkingSpot spot) {
+        Queue<ParkingSpot> spots =
+                freeParkingSpots.get(spot.getSpotType());
+
+        if (spots == null || spots.isEmpty()) {
+            return false;
+        }
+        boolean removed=spots.remove(spot);
+
+        if (!removed) return false;
+        spot.changeOccupancy(true);
+        return true;
+    }
+
 }
